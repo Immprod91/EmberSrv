@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Diagnostics;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -174,6 +176,26 @@ namespace TestApp.Controllers
             response.Content.Headers.ContentType = new MediaTypeHeaderValue("image/jpeg");
             response.StatusCode = HttpStatusCode.OK;
             return response;
+        }
+
+        [ODataRoute("Bicycles/Default.PostLogo(id={id})")]
+        [HttpPost]
+        public async Task<HttpResponseMessage> PostLogo(int id)
+        {
+            string path = System.Web.HttpContext.Current.Server.MapPath("~/Images/bic/");
+            var provider = new MultipartFormDataStreamProvider(path);
+
+            await Request.Content.ReadAsMultipartAsync(provider);
+
+            foreach (MultipartFileData file in provider.FileData)
+            {
+                Bitmap bitmap = new Bitmap(file.LocalFileName);
+                Bitmap newbitmap = new Bitmap(bitmap, 310, 210);
+                newbitmap.Save(path + id + ".jpg");
+                bitmap.Dispose();
+                File.Delete(file.LocalFileName);
+            }
+            return Request.CreateResponse(HttpStatusCode.OK);
         }
     }
 }

@@ -31,12 +31,20 @@ namespace TestApp
                     EntityType.Collection.Function("GetLogo").
                     Returns<System.Net.Http.HttpResponseMessage>().
                     Parameter<int>("id");
+            builder.EntitySet<Department>("Departments").
+                   EntityType.Collection.Function("PostLogo").
+                   Returns<System.Net.Http.HttpResponseMessage>().
+                   Parameter<int>("id");
             builder.EntitySet<Bicycle>("Bicycles").
                     EntityType.Collection.Function("GetByDep").
                     ReturnsFromEntitySet<Bicycle>("Bicycles").
                     Parameter<int>("id");
             builder.EntitySet<Bicycle>("Bicycles").
                     EntityType.Collection.Function("GetLogo").
+                    Returns<System.Net.Http.HttpResponseMessage>().
+                    Parameter<int>("id");
+            builder.EntitySet<Bicycle>("Bicycles").
+                    EntityType.Collection.Function("PostLogo").
                     Returns<System.Net.Http.HttpResponseMessage>().
                     Parameter<int>("id");
             builder.EntitySet<History>("Histories");
